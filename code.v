@@ -34,8 +34,7 @@ module code(
     parameter  s0=3'd0,
                 s1=3'd1,
                 s2=3'd2, 
-                s3=3'd3,
-                s4=3'd4;
+                s3=3'd3;
     reg [2:0] state,next_state;
     reg [7:0]count;
     parameter tg=50;
@@ -47,9 +46,9 @@ module code(
     else if (
         (state==s0 && count==tg) ||
         (state==s1 && count==ty) ||
-        (state==s2 && count==ty) ||
-        (state==s3 && count==tg) ||
-        (state==s4 && count==ty)
+        (state==s2 && count==tr) ||
+        (state==s3 && count==ty) 
+       
     )
         count <= 0;
     else
@@ -71,61 +70,51 @@ end
         
         end
          s2:begin
-        next_state<=(count==ty)?s3:s2;
+        next_state<=(count==tr)?s3:s2;
         
         end
-        s3:next_state<=(count==tg)?s4:s3;
-         s4:begin
-        next_state<=(count==ty)?s2:s4;
+        s3:next_state<=(count==ty)?s0:s3;
         
-        end
        
         default:
          next_state<=s0;
     endcase
     end
     always @(*)begin
+     Yh=1'b0;
+    Yb=1'b0;
+    Rh=1'b0;
+    Gb=1'b0;
+     Gh=1'b0;
+    Rb=1'b0;
     case(state)
     s0:begin
-    Gh<=1'b1;
-    Rb<=1'b1;
-    Yh<=1'b0;
-    Yb<=1'b0;
-    Rh<=1'b0;
-    Gb<=1'b0;
+    Gh=1'b1;
+    Rb=1'b1;
+   
     end
      s1:begin
-    Gh<=1'b0;
-    Rb<=1'b1;
-    Yh<=1'b1;
-    Yb<=1'b0;
-    Rh<=1'b0;
-    Gb<=1'b0;
+   
+    Yh=1'b1;
+    Yb=1'b1;
+   
     end
      s2:begin
-    Gh<=1'b0;
-    Rb<=1'b0;
-    Yh<=1'b1;
-    Yb<=1'b1;
-    Rh<=1'b0;
-    Gb<=1'b0;
+   
+    Rh=1'b1;
+    Gb=1'b1;
     end
      s3:begin
-    Gh<=1'b0;
-    Rb<=1'b0;
-    Yh<=1'b0;
-    Yb<=1'b0;
-    Rh<=1'b1;
-    Gb<=1'b1;
+   
+    Yh=1'b1;
+    Yb=1'b1;
+  
     end
-     s4:begin
-    Gh<=1'b0;
-    Rb<=1'b0;
-    Yh<=1'b0;
-    Yb<=1'b1;
-    Rh<=1'b1;
-    Gb<=1'b0;
+    default begin
+     Gh=1'b1;
+    Rb=1'b1;
     end
+    
     endcase
     end
     
